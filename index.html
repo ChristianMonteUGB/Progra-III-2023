@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server en python</title>
+</head>
+<body>
+    <h2>Saludo: <input type="text" name="txtNombre" id="txtNombre"></h2>
+    <div id="dvdSaludo"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", e=>{
+            txtNombre.addEventListener("Keyup", event=>{
+                fetch("https://fantastic-giggle-x7v77wpv595h9x45-3000.app.github.dev/", {
+                    method: "POST",
+                    body: txtNombre.value
+                }).then(resp=>resp.text())
+                .then(resp=>{
+                    dvSaludo.innerHTML = resp;
+                });     
+            });
+        });
+
+    </script>
+</body>
+</html>
