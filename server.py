@@ -16,23 +16,28 @@ class miServer(SimpleHTTPRequestHandler):
             self.path = "alumnos.html"
             return SimpleHTTPRequestHandler.do_GET(self)
         
+        if self.path=="/frmbusqueda_alumnos":
+            self.path = "busqueda_alumnos.html"
+            return SimpleHTTPRequestHandler.do_GET(self)
+       
         if self.path=="/alumnos":
             self.send_response(200)
             self.end_headers()
             self.wfile.write(json.dumps(crud_alumnos.consultar_alumnos()).encode('utf-8'))
-        
+            
     def do_POST(self):
-        longitud = int(self.headers["Content-Lenght"])
+        longitud = int(self.headers["Content-Length"])
         datos= self.rfile.read(longitud)
-        datos= datos.decode()
-        datos= parse.unquote(datos)
+        datos = datos.decode()
+        datos = parse.unquote(datos)
+        datos = json.loads(datos)
         if self.path=="/alumnos":
             resp = {"msg": crud_alumnos.administrar(datos)}
         
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(datos.encode())
-    
-print("Ejecutando un server en puerto", port)
+        self.wfile.write(json.dumps(resp).encode())
+        
+print("Ejecuntando server en puerto ", port)
 server = HTTPServer(("localhost", port), miServer)
 server.serve_forever()
